@@ -1,5 +1,7 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import * as Yup from "yup";
+import authConfig from "../../config/auth.cjs";
 import User from "../models/User.js";
 
 class SessionController {
@@ -35,11 +37,21 @@ class SessionController {
                 .json({ error: "E-mail or password is invalid!" });
         }
 
+        // Gerar o token JWT para autenticação do usuário
+        const token = jwt.sign(
+            { id: existingUser.id, admin: existingUser.admin },
+            authConfig.secret,
+            {
+                expiresIn: authConfig.expiresIn,
+            },
+        );
+
         // Retornar os dados do usuário com sucesso
         return res.status(201).json({
             id: existingUser.id,
             name: existingUser.name,
             email: existingUser.email,
+            token,
         });
     }
 }

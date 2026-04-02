@@ -3,30 +3,25 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable("users", {
+        /*
+          Criar tabela de categorias com:
+          - id: chave primária, auto-incremento
+          - name: string, não nulo
+          - created_at: data de criação
+          - updated_at: data de atualização
+        */
+
+        await queryInterface.createTable("categories", {
             id: {
                 primaryKey: true,
                 allowNull: false,
-                type: Sequelize.UUID,
-                defaultValue: Sequelize.UUIDV4,
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
             name: {
                 allowNull: false,
                 type: Sequelize.STRING,
-            },
-            email: {
-                allowNull: false,
                 unique: true,
-                type: Sequelize.STRING,
-            },
-            password_hash: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-            admin: {
-                allowNull: false,
-                type: Sequelize.BOOLEAN,
-                defaultValue: false,
             },
             created_at: {
                 allowNull: false,
@@ -40,6 +35,7 @@ module.exports = {
     },
 
     async down(queryInterface) {
-        await queryInterface.dropTable("users");
+        // Remover tabela de categorias
+        await queryInterface.dropTable("categories");
     },
 };
