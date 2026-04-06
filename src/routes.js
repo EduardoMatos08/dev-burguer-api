@@ -6,14 +6,15 @@ import { Router } from "express";
 import multer from "multer";
 // Importação dos Controllers
 import CategoryController from "./app/controllers/CategoryController.js";
+import OrderController from "./app/controllers/OrderController.js";
 import ProductController from "./app/controllers/ProductController.js";
 import SessionController from "./app/controllers/SessionController.js";
 import UserController from "./app/controllers/UserController.js";
+// Middlewares de autenticação
+import adminAuthMiddleware from "./app/middlewares/adminAuth.js";
+import authMiddleware from "./app/middlewares/auth.js";
 // Configurações do Multer
 import multerConfig from "./config/multer.cjs";
-// Middlewares de autenticação
-import adminAuthMiddleware from "./middlewares/adminAuth.js";
-import authMiddleware from "./middlewares/auth.js";
 
 // Instanciando o Router
 const routes = new Router();
@@ -25,6 +26,8 @@ const upload = multer(multerConfig);
 
 // -_- CAMADA SEM AUTENTICAÇÃO -_- //
 
+// -_-_- USUÁRIOS -_-_- //
+
 // Rota POST - Cadastro de usuário
 routes.post("/users", UserController.store);
 // Rota POST - Login de usuário
@@ -33,6 +36,8 @@ routes.post("/session", SessionController.store);
 // -_- CAMADA DE AUTENTICAÇÃO POR TOKEN -_- //
 
 routes.use(authMiddleware); // Aplicando o middleware de autenticação para as rotas seguintesadminAuthMiddleware
+
+// -_-_- PRODUTOS -_-_- //
 
 // Rota POST - Criação de um novo produto com uma imagem, e com uma Middleware para lidar com o upload do arquivo (campo "file")
 routes.post(
@@ -51,6 +56,8 @@ routes.put(
 // Rota GET - Listagem de todos os produtos
 routes.get("/products", ProductController.index);
 
+// -_-_- CATEGORIAS -_-_- //
+
 // Rota POST - Criação de uma nova categoria
 routes.post(
     "/categories",
@@ -68,6 +75,13 @@ routes.put(
 // Rota GET - Listagem de todas as categorias
 routes.get("/categories", CategoryController.index);
 
-// -_- CAMADA DE AUTENTICAÇÃO POR PRIVILÉGIO DE ADMINISTRADOR -_- //
+// -_-_- PEDIDOS -_-_- //
+
+// Rota POST - Criação de pedidos
+routes.post("/orders", OrderController.store);
+// Rota PUT - Atualização de pedidos
+routes.put("/orders/:id", OrderController.update);
+// Rota GET - Listagem de todos os pedidos
+routes.get("/orders", OrderController.index);
 
 export default routes; // Exportando as rotas

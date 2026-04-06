@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import authConfig from "../config/auth.cjs";
+import authConfig from "../../config/auth.cjs";
 
 const authMiddleware = (req, res, next) => {
     // Extrai o token do cabeçalho "Authorization
@@ -18,6 +18,7 @@ const authMiddleware = (req, res, next) => {
             }
 
             req.userId = decoded.id; // Armazena o ID do usuário decodificado no objeto de requisição
+            req.userName = decoded.name; // Armazena o nome do usuário decodificado no objeto de requisição
             req.isAdmin = decoded.admin; // Armazena a informação de admin no objeto de requisição
         });
     } catch (_error) {
