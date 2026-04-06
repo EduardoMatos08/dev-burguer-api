@@ -3,7 +3,7 @@ module.exports = {
         dialect: "postgres",
         host: "localhost",
         username: "admin",
-        password: "#081008Edu",
+        password: "myamazingpassword",
         database: "dev-burguer-db",
         define: {
             timestamps: true,
